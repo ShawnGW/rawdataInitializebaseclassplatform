@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class RabbitServiceImpl {
@@ -21,10 +22,16 @@ public class RabbitServiceImpl {
     private MesService mesService;
     @Autowired
     private RawDataDeal rawdataDeal;
+
     @RabbitListener(queues = "rawdata.init.queue")
     public void getInitialBean(@Payload FtStdfInitialBean bean, @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag, Channel channel) throws IOException, ParseException {
-        RawDataFtBean rawDataFtBean = mesService.getLotConfig(bean.getLotId(), bean.getFtStep());
-        rawdataDeal.deal(bean,rawDataFtBean);
+        RawDataFtBean rawDataFtBean = mesService.getLotConfig(bean.getLotId()+"ss", bean.getFtStep());
+        rawdataDeal.deal(bean, rawDataFtBean);
+        try {
+            TimeUnit.SECONDS.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         channel.basicAck(deliveryTag, false);
     }
 }

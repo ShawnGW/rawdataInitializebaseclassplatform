@@ -5,7 +5,6 @@ import com.vtest.it.common.pojo.RawDataFtBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -16,12 +15,13 @@ public class RawDataDeal {
     @Autowired
     private RawdataTxtGenerate rawdataTxtGenerate;
 
-    public void deal(FtStdfInitialBean bean, RawDataFtBean rawDataFtBean) throws IOException, ParseException {
+    public void deal(FtStdfInitialBean bean, RawDataFtBean rawDataFtBean) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss", Locale.ENGLISH);
         rawDataFtBean.setTestStartTime(format.parse(bean.getTestStartTime()));
         rawDataFtBean.setTestEndTime(format.parse(bean.getTestEndTime()));
         rawDataFtBean.setOperator(bean.getOperator());
         rawDataFtBean.setDataBase(bean.getDataBase());
+        rawDataFtBean.setFtProcess(bean.getFtStep());
         rawDataFtBean.setTestTime("" + (format.parse(bean.getTestEndTime()).getTime() - format.parse(bean.getTestStartTime()).getTime()) / 1000);
         List<String> testDies = bean.getTestDies();
         String[] passBins = rawDataFtBean.getPassBins().split(",");
@@ -61,7 +61,7 @@ public class RawDataDeal {
             stringBuilder.append(String.format("%4s", "0"));
             stringBuilder.append(String.format("%4s", "0"));
             stringBuilder.append(String.format("%4s", hardBin));
-            stringBuilder.append(String.format("%4s", softBin));
+            stringBuilder.append(String.format("%6s", softBin));
             stringBuilder.append(String.format("%4s", site));
             dieList.add(stringBuilder.toString());
         }
