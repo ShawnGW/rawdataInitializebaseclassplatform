@@ -49,7 +49,7 @@ public class RawdataTxtGenerate {
             }
             writer.flush();
             writer.close();
-            rawDataRelease.release(file, "", "");
+            rawDataRelease.release(file, "D:\\target", "right.raw");
         } catch (FileNotFoundException e) {
             try {
                 TimeUnit.SECONDS.sleep(3);

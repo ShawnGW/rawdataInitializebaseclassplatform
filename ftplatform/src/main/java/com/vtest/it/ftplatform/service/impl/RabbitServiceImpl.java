@@ -25,7 +25,7 @@ public class RabbitServiceImpl {
 
     @RabbitListener(queues = "rawdata.init.queue")
     public void getInitialBean(@Payload FtStdfInitialBean bean, @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag, Channel channel) throws IOException, ParseException {
-        RawDataFtBean rawDataFtBean = mesService.getLotConfig(bean.getLotId()+"ss", bean.getFtStep());
+        RawDataFtBean rawDataFtBean = mesService.getLotConfig(bean.getLotId(), bean.getFtStep());
         rawdataDeal.deal(bean, rawDataFtBean);
         try {
             TimeUnit.SECONDS.sleep(100);

@@ -61,7 +61,7 @@ public class RawDataDeal {
             stringBuilder.append(String.format("%4s", "0"));
             stringBuilder.append(String.format("%4s", "0"));
             stringBuilder.append(String.format("%4s", hardBin));
-            stringBuilder.append(String.format("%6s", softBin));
+            stringBuilder.append(String.format("%4s", softBin));
             stringBuilder.append(String.format("%4s", site));
             dieList.add(stringBuilder.toString());
         }

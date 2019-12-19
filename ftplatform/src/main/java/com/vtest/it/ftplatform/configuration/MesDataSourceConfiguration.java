@@ -18,7 +18,7 @@ import java.sql.SQLException;
 @MapperScan(value = "com.vtest.it.ftplatform.dao.mes", sqlSessionTemplateRef = "sqlSessionTemplate")
 public class MesDataSourceConfiguration {
     @Bean(value = "druidDataSource", initMethod = "init", destroyMethod = "close")
-    @ConfigurationProperties(prefix = "spring.datasource.druid")
+    @ConfigurationProperties(prefix = "spring.datasource.druid.mes")
     @Primary
     public DruidDataSource druidDataSource() throws SQLException {
         DruidDataSource druidDataSource = new DruidDataSource();

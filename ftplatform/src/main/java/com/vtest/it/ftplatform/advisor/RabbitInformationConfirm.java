@@ -17,7 +17,7 @@ public class RabbitInformationConfirm {
     private static final Logger logger = LoggerFactory.getLogger(RabbitInformationConfirm.class);
 
     @AfterThrowing(pointcut = "execution(public * com.vtest.it.ftplatform.service.impl.RabbitServiceImpl.getInitialBean(..))&&args(bean,deliveryTag,channel)", throwing = "exception")
-    public void informationInitialDeal(FtStdfInitialBean bean,long deliveryTag, Channel channel, Exception exception) {
+    public void informationInitialDeal(FtStdfInitialBean bean, long deliveryTag, Channel channel, Exception exception) {
         try {
             channel.basicNack(deliveryTag, false, false);
         } catch (IOException e) {
