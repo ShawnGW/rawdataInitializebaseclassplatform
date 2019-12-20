@@ -31,10 +31,10 @@ public class RawDataDealException {
     @AfterThrowing(value = "rawDataGenerateExceptionAdvisor()&&args(bean,rawDataFtBean))", throwing = "e")
     public void deal(FtStdfInitialBean bean, RawDataFtBean rawDataFtBean, Exception e) {
         DataParseIssueBean dataParseIssueBean;
-        if (null==rawDataFtBean){
-            dataParseIssueBean=new IssueBeanBuilderByRawDataBean(rawDataFtBean,"Runtime exception",e.getMessage()).getDataParseIssueBean();
+        if (null!=rawDataFtBean){
+            dataParseIssueBean=new IssueBeanBuilderByRawDataBean(rawDataFtBean,"Runtime exception","unknow").getDataParseIssueBean();
         }else {
-            dataParseIssueBean=new IssueBeanBuilderByFtInitialBean(bean,"can't find this lot in mes,please check the step or lot",e.getMessage()).getDataParseIssueBean();
+            dataParseIssueBean=new IssueBeanBuilderByFtInitialBean(bean,"Properties error","miss lot or ft step").getDataParseIssueBean();
         }
         vtftmtService.logError(dataParseIssueBean);
     }
