@@ -68,6 +68,6 @@ public class RawDataDeal {
         rawDataFtBean.setPassDie(passDieCount);
         rawDataFtBean.setFailDie(failDieCount);
         rawDataFtBean.setLotYield(((double) passDieCount) / (passDieCount + failDieCount));
-        rawdataTxtGenerate.generateTxt(rawDataFtBean, dieList, binSummary, softBinSummary);
+        rawdataTxtGenerate.generateTxt(bean,rawDataFtBean, dieList, binSummary, softBinSummary);
     }
 }

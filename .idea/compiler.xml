@@ -7,15 +7,19 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="ft-stdf-parse" />
+        <module name="ft-tester-datalog-initial-text" />
         <module name="ftplatform" />
         <module name="rawdatainitializecommon" />
-        <module name="tsk-platform-generate-rawdata" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="tsk-platform-generate-rawdata" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="ft-stdf-parse" options="-parameters" />
+      <module name="ft-tester-datalog-initial-text" options="-parameters" />
       <module name="ftplatform" options="-parameters" />
       <module name="tsk-platform-generate-rawdata" options="-parameters" />
     </option>

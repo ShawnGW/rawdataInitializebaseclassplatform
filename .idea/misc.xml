@@ -5,9 +5,9 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/tsk-platform-generate-rawdata/pom.xml" />
         <option value="$PROJECT_DIR$/ftplatform/pom.xml" />
         <option value="$PROJECT_DIR$/ft-stdf-parse/pom.xml" />
+        <option value="$PROJECT_DIR$/ft-tester-datalog-initial-text/pom.xml" />
       </list>
     </option>
   </component>

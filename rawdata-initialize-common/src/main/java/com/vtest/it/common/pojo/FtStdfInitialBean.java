@@ -12,6 +12,7 @@ public class FtStdfInitialBean implements Serializable {
     private String dataBase;
     private String testStartTime;
     private String testEndTime;
+    private String rpStep;
     private List<String> testDies;
 
     public String getLotId() {
@@ -60,6 +61,14 @@ public class FtStdfInitialBean implements Serializable {
 
     public void setTestEndTime(String testEndTime) {
         this.testEndTime = testEndTime;
+    }
+
+    public String getRpStep() {
+        return rpStep;
+    }
+
+    public void setRpStep(String rpStep) {
+        this.rpStep = rpStep;
     }
 
     public List<String> getTestDies() {
