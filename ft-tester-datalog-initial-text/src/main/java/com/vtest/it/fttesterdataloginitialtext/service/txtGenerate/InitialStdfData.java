@@ -62,16 +62,16 @@ public class InitialStdfData {
                     if (!targetDirectory.exists()) {
                         targetDirectory.mkdirs();
                     }
-                    File targrtFile=new File(targetDirectory.getPath() + "/" + stdf.getName());
-                    FileUtils.moveFile(stdf, targrtFile);
-
+                    File targetFile=new File(targetDirectory.getPath() + "/" + stdf.getName());
+                    FileUtils.copyFile(stdf, targetFile);
+                    FileUtils.forceDelete(stdf);
                     if (stdf.getName().endsWith(".stdf")){
                         File directory = new File(targetPath + "/" + customerCode + "/" + device + "/" + lot + "/" + vLot + "/" + ftStep);
                         if (!directory.exists()) {
                             directory.mkdirs();
                         }
                         File stdfTxt = new File(directory.getPath() + "/" + stdf.getName() + ".txt");
-                        String CMD = STDFREADER + targrtFile + " > " + stdfTxt;
+                        String CMD = STDFREADER + targetFile + " > " + stdfTxt;
                         Runtime.getRuntime().exec(new String[]{"/bin/sh", "-c", CMD});
                     }
                     logger.info(stdf.getName());

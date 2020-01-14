@@ -17,7 +17,6 @@ public class FtStdfParse {
         boolean flag = false;
         String lotId = null;
         String operator = null;
-        String ftStep = null;
         String testStartTime = null;
         String testEndTime = null;
         FileReader in = new FileReader(file);
@@ -56,10 +55,6 @@ public class FtStdfParse {
                     operator = content.trim().split(":")[1].trim();
                     continue;
                 }
-                if (content.contains("TEST_COD")) {
-                    ftStep = content.trim().split(":")[1].trim();
-                    continue;
-                }
                 if (content.contains("START_T")) {
                     String time = content.trim();
                     testStartTime = time.substring(time.indexOf("(")+1,time.indexOf(")"));
@@ -72,8 +67,9 @@ public class FtStdfParse {
                 }
             }
         }
+        in.close();
+        reader.close();
         ftStdfInitialBean.setLotId(lotId);
-        ftStdfInitialBean.setFtStep(ftStep);
         ftStdfInitialBean.setOperator(operator);
         ftStdfInitialBean.setDataBase("STDF");
         ftStdfInitialBean.setTestStartTime(testStartTime);
