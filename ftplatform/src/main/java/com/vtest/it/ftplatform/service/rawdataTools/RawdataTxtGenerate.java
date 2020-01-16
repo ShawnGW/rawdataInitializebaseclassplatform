@@ -21,6 +21,10 @@ public class RawdataTxtGenerate {
 
     @Value("${system.properties.tempRawDataPath}")
     private String tempRawDataPath;
+
+    @Value("${system.properties.target}")
+    private String targetPath;
+
     @Autowired
     private RawDataPropertiesInitial rawDataPropertiesInitial;
     @Autowired
@@ -29,7 +33,7 @@ public class RawdataTxtGenerate {
     public void generateTxt(FtStdfInitialBean bean, RawDataFtBean rawDataFtBean, List<String> dieList, Map<Integer, Integer> binSummary, Map<Integer, Integer> SoftBinSummary) {
         File file = new File(tempRawDataPath + "/" + rawDataFtBean.getLotId() + "_" + rawDataFtBean.getFtProcess() + "_" + rawDataFtBean.getFtProcess() + "_" + System.currentTimeMillis() + ".raw");
         try {
-            SimpleDateFormat format=new SimpleDateFormat("yyyyMMddHHmmss");
+            SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
             Map<String, String> map = rawDataPropertiesInitial.initial(rawDataFtBean);
             PrintWriter writer = new PrintWriter(file);
             for (Map.Entry<String, String> entry : map.entrySet()) {
@@ -52,7 +56,8 @@ public class RawdataTxtGenerate {
             }
             writer.flush();
             writer.close();
-            rawDataRelease.release(file, "D:\\target", rawDataFtBean.getLotId()+"_"+rawDataFtBean.getFtProcess()+"_"+bean.getRpStep()+"_"+format.format(rawDataFtBean.getTestStartTime())+".raw");
+            String FileTargetPath=targetPath+"/"+rawDataFtBean.getCustomerCode()+"/"+rawDataFtBean.getDeviceName()+"/"+rawDataFtBean.getLotId()+"/"+rawDataFtBean.getFtProcess()+"/"+rawDataFtBean.getWaferId();
+            rawDataRelease.release(file, FileTargetPath, rawDataFtBean.getWaferId() + "_" + rawDataFtBean.getFtProcess() + "_" + bean.getRpStep() + "_" + format.format(rawDataFtBean.getTestStartTime()) + ".raw");
         } catch (FileNotFoundException e) {
             try {
                 TimeUnit.SECONDS.sleep(3);
@@ -64,7 +69,7 @@ public class RawdataTxtGenerate {
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
-            generateTxt(bean,rawDataFtBean, dieList, binSummary, SoftBinSummary);
+            generateTxt(bean, rawDataFtBean, dieList, binSummary, SoftBinSummary);
         }
     }
 }

@@ -22,6 +22,8 @@ public class RawDataDeal {
         rawDataFtBean.setOperator(bean.getOperator());
         rawDataFtBean.setDataBase(bean.getDataBase());
         rawDataFtBean.setFtProcess(bean.getFtStep());
+        rawDataFtBean.setWaferId(bean.getVtLot());
+        rawDataFtBean.setLotId(bean.getLotId());
         rawDataFtBean.setTestTime("" + (format.parse(bean.getTestEndTime()).getTime() - format.parse(bean.getTestStartTime()).getTime()) / 1000);
         List<String> testDies = bean.getTestDies();
         String[] passBins = rawDataFtBean.getPassBins().split(",");

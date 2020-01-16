@@ -10,6 +10,10 @@ import java.io.IOException;
 public class RawDataRelease {
     public void release(File sourceFile,String path,String rightName){
         try {
+            File targetDirectory=new File(path);
+            if (!targetDirectory.exists()){
+                targetDirectory.mkdirs();
+            }
             File destFile=new File(path+"/"+rightName);
             FileUtils.copyFile(sourceFile,destFile);
             if (DiffUtil.check(sourceFile,destFile)){

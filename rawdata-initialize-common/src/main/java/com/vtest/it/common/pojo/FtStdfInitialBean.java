@@ -7,6 +7,7 @@ import java.util.List;
 public class FtStdfInitialBean implements Serializable {
     private static final long serialVersionUID=1l;
     private String lotId;
+    private String vtLot;
     private String ftStep;
     private String operator;
     private String dataBase;
@@ -21,6 +22,14 @@ public class FtStdfInitialBean implements Serializable {
 
     public void setLotId(String lotId) {
         this.lotId = lotId;
+    }
+
+    public String getVtLot() {
+        return vtLot;
+    }
+
+    public void setVtLot(String vtLot) {
+        this.vtLot = vtLot;
     }
 
     public String getFtStep() {

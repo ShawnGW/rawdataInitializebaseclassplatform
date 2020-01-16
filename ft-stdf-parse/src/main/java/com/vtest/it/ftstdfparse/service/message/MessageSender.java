@@ -42,10 +42,11 @@ public class MessageSender {
                    FtStdfInitialBean ftStdfInitialBean = parse.parse(file);
                    ftStdfInitialBean.setFtStep(bean.getFtStep());
                    ftStdfInitialBean.setRpStep(bean.getRpStep());
+                   ftStdfInitialBean.setVtLot(bean.getvLot());
                    rabbitTemplate.convertAndSend("rawdata.init.exchange", "rawdata.information.vtest", ftStdfInitialBean);
                    logger.info(ftStdfInitialBean.getLotId());
                    logger.info(ftStdfInitialBean.getFtStep());
-                   logger.info(file.getPath());
+                   logger.info(file.getName());
                } catch (Exception e) {
                    e.printStackTrace();
                } finally {
