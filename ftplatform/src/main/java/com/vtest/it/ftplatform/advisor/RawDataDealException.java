@@ -32,7 +32,7 @@ public class RawDataDealException {
     public void deal(FtStdfInitialBean bean, RawDataFtBean rawDataFtBean, Exception e) {
         DataParseIssueBean dataParseIssueBean;
         if (null!=rawDataFtBean){
-            dataParseIssueBean=new IssueBeanBuilderByRawDataBean(rawDataFtBean,"Runtime exception","unknow").getDataParseIssueBean();
+            dataParseIssueBean=new IssueBeanBuilderByRawDataBean(rawDataFtBean,"Runtime exception",e.getMessage()).getDataParseIssueBean();
         }else {
             dataParseIssueBean=new IssueBeanBuilderByFtInitialBean(bean,"Properties error","miss lot or ft step").getDataParseIssueBean();
         }

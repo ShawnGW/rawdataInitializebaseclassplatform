@@ -61,7 +61,7 @@ public class IssueBeanBuilderByRawDataBean extends AbstractIssueBeanBuilder {
 
     @Override
     public void setIssuePath() {
-        dataParseIssueBean.setIssueType("it was transformed by stdf,please check stdf in Data directory");
+        dataParseIssueBean.setIssuePath("it was transformed by stdf,please check stdf in Data directory");
     }
 
     @Override
