@@ -43,6 +43,9 @@ public class MessageSender {
                    ftStdfInitialBean.setFtStep(bean.getFtStep());
                    ftStdfInitialBean.setRpStep(bean.getRpStep());
                    ftStdfInitialBean.setVtLot(bean.getvLot());
+                   if (null==ftStdfInitialBean.getTestEndTime()) {
+                       ftStdfInitialBean.setTestEndTime(ftStdfInitialBean.getTestStartTime());
+                   }
                    rabbitTemplate.convertAndSend("rawdata.init.exchange", "rawdata.information.vtest", ftStdfInitialBean);
                    logger.info(ftStdfInitialBean.getLotId());
                    logger.info(ftStdfInitialBean.getFtStep());

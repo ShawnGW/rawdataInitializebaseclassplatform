@@ -32,7 +32,7 @@ public class RawDataDealException {
     public void deal(FtStdfInitialBean bean, RawDataFtBean rawDataFtBean, Exception e) {
         DataParseIssueBean dataParseIssueBean;
         if (null!=rawDataFtBean){
-            dataParseIssueBean=new IssueBeanBuilderByRawDataBean(rawDataFtBean,"Runtime exception",e.getMessage()).getDataParseIssueBean();
+            dataParseIssueBean=new IssueBeanBuilderByRawDataBean(rawDataFtBean,"Runtime exception","reason:"+e.getMessage()).getDataParseIssueBean();
         }else {
             dataParseIssueBean=new IssueBeanBuilderByFtInitialBean(bean,"Properties error","miss lot or ft step").getDataParseIssueBean();
         }
@@ -57,8 +57,8 @@ public class RawDataDealException {
             String site = tokens[2];
             if (hardBin.length() > 4 || softBin.length() > 4) {
                 testDies.remove(die);
+                listAfterModify.add(firstOsBin + ":" + firstOsBin + ":" + site);
             }
-            listAfterModify.add(firstOsBin + ":" + firstOsBin + ":" + site);
         }
         testDies.addAll(listAfterModify);
     }
