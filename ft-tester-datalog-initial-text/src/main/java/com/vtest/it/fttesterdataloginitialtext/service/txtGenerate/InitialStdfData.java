@@ -4,7 +4,6 @@ import com.vtest.it.fttesterdataloginitialtext.pojo.StdfInformationBean;
 import com.vtest.it.fttesterdataloginitialtext.service.predeal.impl.CommonListNeedDealImpl;
 import com.vtest.it.fttesterdataloginitialtext.service.stdfNameParse.StdfParser;
 import com.vtest.it.fttesterdataloginitialtext.service.stdfNameParse.impl.J750StdfParserImpl;
-import lombok.extern.log4j.Log4j;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,10 +21,12 @@ import java.util.Map;
 @Service
 public class InitialStdfData {
 
-    private static final Logger logger= LoggerFactory.getLogger(InitialStdfData.class);
+    private static final Logger logger = LoggerFactory.getLogger(InitialStdfData.class);
 
     @Value("${system.properties.source-j750}")
     private String j750SourcePath;
+    @Value("${system.properties.source-v93000}")
+    private String v93kSourcePath;
     @Value("${system.properties.target}")
     private String targetPath;
     @Value("${system.properties.backup}")
@@ -43,7 +44,9 @@ public class InitialStdfData {
         Map<StdfParser, List<File>> totalList = new HashMap<>();
 
         List<File> j750List = commonListNeedDeal.getStdfListAndDealOthersFile(j750SourcePath);
+        List<File> v93kList = commonListNeedDeal.getStdfListAndDealOthersFile(v93kSourcePath);
         totalList.put(J750StdfParserImpl, j750List);
+        totalList.put(J750StdfParserImpl, v93kList);
 
 
         for (Map.Entry<StdfParser, List<File>> stdfParserListEntry : totalList.entrySet()) {
@@ -62,10 +65,10 @@ public class InitialStdfData {
                     if (!targetDirectory.exists()) {
                         targetDirectory.mkdirs();
                     }
-                    File targetFile=new File(targetDirectory.getPath() + "/" + stdf.getName());
+                    File targetFile = new File(targetDirectory.getPath() + "/" + stdf.getName());
                     FileUtils.copyFile(stdf, targetFile);
                     FileUtils.forceDelete(stdf);
-                    if (stdf.getName().endsWith(".stdf")){
+                    if (stdf.getName().endsWith(".stdf")) {
                         File directory = new File(targetPath + "/" + customerCode + "/" + device + "/" + lot + "/" + vLot + "/" + ftStep);
                         if (!directory.exists()) {
                             directory.mkdirs();
@@ -77,7 +80,7 @@ public class InitialStdfData {
                     logger.info(stdf.getName());
                 } catch (Exception e) {
                     e.printStackTrace();
-                    logger.error(stdf.getName()+" has occur error!");
+                    logger.error(stdf.getName() + " has occur error!");
                 }
             }
         }
