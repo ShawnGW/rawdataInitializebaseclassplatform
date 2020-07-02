@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 public class FtStdfInitialBean implements Serializable {
-    private static final long serialVersionUID=1l;
+    private static final long serialVersionUID=1L;
     private String lotId;
     private String vtLot;
     private String ftStep;

@@ -4,7 +4,7 @@ package com.vtest.it.common.pojo;
 import java.io.Serializable;
 
 public class StdfInformationBean implements Serializable {
-    private static final long serialVersionUID = 1l;
+    private static final long serialVersionUID = 1L;
     private String customerCode;
     private String device;
     private String lot;

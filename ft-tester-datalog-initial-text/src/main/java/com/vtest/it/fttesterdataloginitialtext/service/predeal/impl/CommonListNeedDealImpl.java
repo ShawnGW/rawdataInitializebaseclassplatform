@@ -2,15 +2,20 @@ package com.vtest.it.fttesterdataloginitialtext.service.predeal.impl;
 
 import com.vtest.it.fttesterdataloginitialtext.service.predeal.ListNeedDeal;
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.zeroturnaround.zip.ZipUtil;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
 @Service
 public class CommonListNeedDealImpl implements ListNeedDeal {
+    private static final Logger logger = LoggerFactory.getLogger(CommonListNeedDealImpl.class);
+
     @Override
     public List<File> getStdfListAndDealOthersFile(String path) {
         File[] files = new File(path).listFiles();
@@ -35,9 +40,16 @@ public class CommonListNeedDealImpl implements ListNeedDeal {
         for (File file : zipList) {
             try {
                 ZipUtil.unpack(file, target);
-                FileUtils.forceDelete(file);
             } catch (Exception e) {
+                logger.error(file.getName());
+                logger.error("there are error in this "+file.getName()+" has been deleted!");
                 e.printStackTrace();
+            }finally {
+                try {
+                    FileUtils.forceDelete(file);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return normalList;

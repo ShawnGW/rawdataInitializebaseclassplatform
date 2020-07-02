@@ -3,7 +3,7 @@ package com.vtest.it.ftplatform.pojo.vtftmt;
 import java.io.Serializable;
 
 public class DataParseIssueBean implements Serializable {
-    private static final long serialVersionUID = 1l;
+    private static final long serialVersionUID = 1L;
     private String customCode;
     private String device;
     private String lotId;

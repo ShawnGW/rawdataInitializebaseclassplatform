@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 public class RawdataInitial implements Serializable {
-    private static final long serialVersionUID = 1l;
+    private static final long serialVersionUID = 1L;
     private LinkedHashMap<String, String> properties;
     private LinkedHashMap<String, String> dataProperties;
     private HashMap<Integer, HashMap<Integer, Integer>> siteBinSum;

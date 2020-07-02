@@ -1,5 +1,6 @@
 package com.vtest.it.ftplatform.service.rawdataTools;
 
+import com.alibaba.fastjson.JSON;
 import com.vtest.it.common.pojo.FtStdfInitialBean;
 import com.vtest.it.common.pojo.RawDataFtBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ public class RawDataDeal {
     private RawdataTxtGenerate rawdataTxtGenerate;
 
     public void deal(FtStdfInitialBean bean, RawDataFtBean rawDataFtBean) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss", Locale.ENGLISH);
+        SimpleDateFormat format = new SimpleDateFormat("dd-MMM-yyyy hh:mm:ss", Locale.ENGLISH);
         rawDataFtBean.setTestStartTime(format.parse(bean.getTestStartTime()));
         rawDataFtBean.setTestEndTime(format.parse(bean.getTestEndTime()));
         rawDataFtBean.setOperator(bean.getOperator());

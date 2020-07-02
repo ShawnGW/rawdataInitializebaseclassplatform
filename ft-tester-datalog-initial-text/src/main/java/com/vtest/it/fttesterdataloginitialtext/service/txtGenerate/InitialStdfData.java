@@ -41,17 +41,15 @@ public class InitialStdfData {
 
     @Scheduled(fixedRate = 200)
     public void initial() throws IOException {
-        Map<StdfParser, List<File>> totalList = new HashMap<>();
+        Map< List<File>,StdfParser> totalList = new HashMap<>();
 
         List<File> j750List = commonListNeedDeal.getStdfListAndDealOthersFile(j750SourcePath);
         List<File> v93kList = commonListNeedDeal.getStdfListAndDealOthersFile(v93kSourcePath);
-        totalList.put(J750StdfParserImpl, j750List);
-        totalList.put(J750StdfParserImpl, v93kList);
-
-
-        for (Map.Entry<StdfParser, List<File>> stdfParserListEntry : totalList.entrySet()) {
-            List<File> list = stdfParserListEntry.getValue();
-            StdfParser parser = stdfParserListEntry.getKey();
+        totalList.put(j750List,J750StdfParserImpl);
+        totalList.put(v93kList,J750StdfParserImpl);
+        for (Map.Entry<List<File>,StdfParser> stdfParserListEntry : totalList.entrySet()) {
+            List<File> list = stdfParserListEntry.getKey();
+            StdfParser parser = stdfParserListEntry.getValue();
             for (File stdf : list) {
                 try {
                     StdfInformationBean stdfInformationBean = parser.parse(stdf);
