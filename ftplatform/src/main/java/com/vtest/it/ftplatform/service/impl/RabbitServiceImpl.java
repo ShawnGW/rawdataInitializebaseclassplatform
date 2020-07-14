@@ -1,6 +1,5 @@
 package com.vtest.it.ftplatform.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.rabbitmq.client.Channel;
 import com.vtest.it.common.pojo.FtStdfInitialBean;
 import com.vtest.it.common.pojo.RawDataFtBean;
@@ -29,7 +28,7 @@ public class RabbitServiceImpl {
     public void getInitialBean(@Payload FtStdfInitialBean bean, @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag, Channel channel) throws IOException, ParseException {
         RawDataFtBean rawDataFtBean = mesService.getLotConfig(bean.getVtLot(), bean.getFtStep());
         if (rawDataFtBean == null) {
-            log.info("Error lot:"+bean.getVtLot()+" and Step:"+bean.getFtStep());
+            log.info("Error lot:" + bean.getVtLot() + " and Step:" + bean.getFtStep());
             log.info("cant't find this lot and ft step in mes,please contact to pe owner");
             channel.basicNack(deliveryTag, false, false);
             return;

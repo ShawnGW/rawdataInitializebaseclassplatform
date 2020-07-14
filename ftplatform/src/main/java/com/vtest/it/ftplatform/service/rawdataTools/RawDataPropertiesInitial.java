@@ -51,6 +51,7 @@ public class RawDataPropertiesInitial {
         map.put("Handel Device",rawDataFtBean.getHandelDevice());
         map.put("Operator",rawDataFtBean.getOperator());
         map.put("Tester Program",rawDataFtBean.getTesterProgram());
+        map.put("Stdf Program",rawDataFtBean.getStdfProgram());
         map.put("ALL FT Programs",rawDataFtBean.getAllFtPrograms());
         map.put("Tester ID",rawDataFtBean.getTesterId());
         map.put("Handel ID",rawDataFtBean.getHandelId());

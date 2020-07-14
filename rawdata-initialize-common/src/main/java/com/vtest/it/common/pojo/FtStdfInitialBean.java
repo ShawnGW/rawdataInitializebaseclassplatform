@@ -11,6 +11,7 @@ public class FtStdfInitialBean implements Serializable {
     private String ftStep;
     private String operator;
     private String dataBase;
+    private String stdfProgram;
     private String testStartTime;
     private String testEndTime;
     private String rpStep;
@@ -54,6 +55,14 @@ public class FtStdfInitialBean implements Serializable {
 
     public void setDataBase(String dataBase) {
         this.dataBase = dataBase;
+    }
+
+    public String getStdfProgram() {
+        return stdfProgram;
+    }
+
+    public void setStdfProgram(String stdfProgram) {
+        this.stdfProgram = stdfProgram;
     }
 
     public String getTestStartTime() {

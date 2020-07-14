@@ -44,6 +44,7 @@ public class RawDataFtBean implements Serializable {
     private String handelDevice;
     private String operator;
     private String testerProgram;
+    private String stdfProgram;
     private String allFtPrograms;
     private String testerId;
     private String handelId;
@@ -369,6 +370,14 @@ public class RawDataFtBean implements Serializable {
 
     public void setTesterProgram(String testerProgram) {
         this.testerProgram = testerProgram;
+    }
+
+    public String getStdfProgram() {
+        return stdfProgram;
+    }
+
+    public void setStdfProgram(String stdfProgram) {
+        this.stdfProgram = stdfProgram;
     }
 
     public String getAllFtPrograms() {

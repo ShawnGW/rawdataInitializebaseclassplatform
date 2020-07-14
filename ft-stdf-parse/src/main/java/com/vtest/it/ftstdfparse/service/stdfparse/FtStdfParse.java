@@ -19,6 +19,7 @@ public class FtStdfParse {
         String operator = null;
         String testStartTime = null;
         String testEndTime = null;
+        String stdfProgram = null;
         FileReader in = new FileReader(file);
         BufferedReader reader = new BufferedReader(in);
         String content = null;
@@ -47,7 +48,7 @@ public class FtStdfParse {
                     continue;
                 }
             } else {
-                if (content.contains("LOT_ID")&&content.trim().split(":")[0].equals("LOT_ID")) {
+                if (content.contains("LOT_ID") && content.trim().split(":")[0].equals("LOT_ID")) {
                     lotId = content.trim().split(":")[1].trim();
                     continue;
                 }
@@ -55,14 +56,18 @@ public class FtStdfParse {
                     operator = content.trim().split(":")[1].trim();
                     continue;
                 }
+                if (content.contains("JOB_NAM")) {
+                    stdfProgram = content.trim().split(":")[1].trim();
+                    continue;
+                }
                 if (content.contains("START_T")) {
                     String time = content.trim();
-                    testStartTime = time.substring(time.indexOf("(")+1,time.indexOf(")"));
+                    testStartTime = time.substring(time.indexOf("(") + 1, time.indexOf(")"));
                     continue;
                 }
                 if (content.contains("FINISH_T")) {
                     String time = content.trim();
-                    testEndTime = time.substring(time.indexOf("(")+1,time.indexOf(")"));
+                    testEndTime = time.substring(time.indexOf("(") + 1, time.indexOf(")"));
                     break;
                 }
             }
@@ -75,6 +80,7 @@ public class FtStdfParse {
         ftStdfInitialBean.setTestStartTime(testStartTime);
         ftStdfInitialBean.setTestEndTime(testEndTime);
         ftStdfInitialBean.setTestDies(dieList);
+        ftStdfInitialBean.setStdfProgram(stdfProgram);
         return ftStdfInitialBean;
     }
 }
