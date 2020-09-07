@@ -1,5 +1,6 @@
 package com.vtest.it.fttesterdataloginitialtext.service.txtGenerate;
 
+import com.vtest.it.fttesterdataloginitialtext.pojo.DataLogPathBean;
 import com.vtest.it.fttesterdataloginitialtext.pojo.StdfInformationBean;
 import com.vtest.it.fttesterdataloginitialtext.service.predeal.impl.CommonListNeedDealImpl;
 import com.vtest.it.fttesterdataloginitialtext.service.stdfNameParse.StdfParser;
@@ -7,6 +8,7 @@ import com.vtest.it.fttesterdataloginitialtext.service.stdfNameParse.impl.J750St
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -22,7 +24,8 @@ import java.util.Map;
 public class InitialStdfData {
 
     private static final Logger logger = LoggerFactory.getLogger(InitialStdfData.class);
-
+    private static final String GYD="GYD";
+    private static final String FYD="FYD";
     @Value("${system.properties.source-j750}")
     private String j750SourcePath;
     @Value("${system.properties.source-v93000}")
@@ -32,22 +35,36 @@ public class InitialStdfData {
     @Value("${system.properties.backup}")
     private String backupPath;
 
-    @Autowired
-    private J750StdfParserImpl J750StdfParserImpl;
-    @Autowired
+    private J750StdfParserImpl j750StdfParserImpl;
     private CommonListNeedDealImpl commonListNeedDeal;
+    private RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    public void setJ750StdfParserImpl(J750StdfParserImpl j750StdfParserImpl) {
+        this.j750StdfParserImpl = j750StdfParserImpl;
+    }
+
+    @Autowired
+    public void setCommonListNeedDeal(CommonListNeedDealImpl commonListNeedDeal) {
+        this.commonListNeedDeal = commonListNeedDeal;
+    }
+    @Autowired
+    public void setRabbitTemplate(RabbitTemplate rabbitTemplate) {
+        this.rabbitTemplate = rabbitTemplate;
+    }
 
     private static final String STDFREADER = "/scripts/STDFreader ";
 
+
     @Scheduled(fixedRate = 200)
     public void initial() throws IOException {
-        Map< List<File>,StdfParser> totalList = new HashMap<>();
+        Map<List<File>, StdfParser> totalList = new HashMap<>();
 
         List<File> j750List = commonListNeedDeal.getStdfListAndDealOthersFile(j750SourcePath);
         List<File> v93kList = commonListNeedDeal.getStdfListAndDealOthersFile(v93kSourcePath);
-        totalList.put(j750List,J750StdfParserImpl);
-        totalList.put(v93kList,J750StdfParserImpl);
-        for (Map.Entry<List<File>,StdfParser> stdfParserListEntry : totalList.entrySet()) {
+        totalList.put(j750List, j750StdfParserImpl);
+        totalList.put(v93kList, j750StdfParserImpl);
+        for (Map.Entry<List<File>, StdfParser> stdfParserListEntry : totalList.entrySet()) {
             List<File> list = stdfParserListEntry.getKey();
             StdfParser parser = stdfParserListEntry.getValue();
             for (File stdf : list) {
@@ -58,8 +75,8 @@ public class InitialStdfData {
                     String lot = stdfInformationBean.getLot();
                     String ftStep = stdfInformationBean.getFtStep();
                     String vLot = stdfInformationBean.getVLot();
-
-                    File targetDirectory = new File(backupPath + "/" + customerCode + "/" + device + "/" + lot + "/" + vLot + "/" + ftStep);
+                    String path="/" + customerCode + "/" + device + "/" + lot + "/" + vLot + "/" + ftStep;
+                    File targetDirectory = new File(backupPath +path);
                     if (!targetDirectory.exists()) {
                         targetDirectory.mkdirs();
                     }
@@ -67,13 +84,22 @@ public class InitialStdfData {
                     FileUtils.copyFile(stdf, targetFile);
                     FileUtils.forceDelete(stdf);
                     if (stdf.getName().endsWith(".stdf")) {
-                        File directory = new File(targetPath + "/" + customerCode + "/" + device + "/" + lot + "/" + vLot + "/" + ftStep);
+                        File directory = new File(targetPath + path);
                         if (!directory.exists()) {
                             directory.mkdirs();
                         }
                         File stdfTxt = new File(directory.getPath() + "/" + stdf.getName() + ".txt");
                         String CMD = STDFREADER + targetFile + " > " + stdfTxt;
                         Runtime.getRuntime().exec(new String[]{"/bin/sh", "-c", CMD});
+                    }
+                    if (customerCode.equals(GYD)||customerCode.equals(FYD)) {
+                        DataLogPathBean datalogPathBean=new DataLogPathBean();
+                        datalogPathBean.setCustomerCode(customerCode);
+                        datalogPathBean.setDevice(device);
+                        datalogPathBean.setLot(lot);
+                        datalogPathBean.setVLot(vLot);
+                        datalogPathBean.setFtStep(ftStep);
+                        rabbitTemplate.convertAndSend(datalogPathBean);
                     }
                     logger.info(stdf.getName());
                 } catch (Exception e) {
