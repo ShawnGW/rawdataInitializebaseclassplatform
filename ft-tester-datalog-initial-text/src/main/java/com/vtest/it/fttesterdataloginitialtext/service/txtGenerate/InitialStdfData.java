@@ -16,9 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class InitialStdfData {
@@ -64,6 +62,7 @@ public class InitialStdfData {
         List<File> v93kList = commonListNeedDeal.getStdfListAndDealOthersFile(v93kSourcePath);
         totalList.put(j750List, j750StdfParserImpl);
         totalList.put(v93kList, j750StdfParserImpl);
+        Set<DataLogPathBean> dataLogPathBeans=new HashSet<>();
         for (Map.Entry<List<File>, StdfParser> stdfParserListEntry : totalList.entrySet()) {
             List<File> list = stdfParserListEntry.getKey();
             StdfParser parser = stdfParserListEntry.getValue();
@@ -99,7 +98,7 @@ public class InitialStdfData {
                         datalogPathBean.setLot(lot);
                         datalogPathBean.setVLot(vLot);
                         datalogPathBean.setFtStep(ftStep);
-                        rabbitTemplate.convertAndSend(datalogPathBean);
+                        dataLogPathBeans.add(datalogPathBean);
                     }
                     logger.info(stdf.getName());
                 } catch (Exception e) {
@@ -107,6 +106,9 @@ public class InitialStdfData {
                     logger.error(stdf.getName() + " has occur error!");
                 }
             }
+        }
+        for (DataLogPathBean dataLogPathBean : dataLogPathBeans) {
+            rabbitTemplate.convertAndSend(dataLogPathBean);
         }
     }
 }
