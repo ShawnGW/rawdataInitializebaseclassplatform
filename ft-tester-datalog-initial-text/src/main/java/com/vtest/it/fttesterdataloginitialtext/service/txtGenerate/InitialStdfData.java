@@ -22,8 +22,8 @@ import java.util.*;
 public class InitialStdfData {
 
     private static final Logger logger = LoggerFactory.getLogger(InitialStdfData.class);
-    private static final String GYD="GYD";
-    private static final String FYD="FYD";
+    private static final String GYD = "GYD";
+    private static final String FYD = "FYD";
     @Value("${system.properties.source-j750}")
     private String j750SourcePath;
     @Value("${system.properties.source-v93000}")
@@ -46,6 +46,7 @@ public class InitialStdfData {
     public void setCommonListNeedDeal(CommonListNeedDealImpl commonListNeedDeal) {
         this.commonListNeedDeal = commonListNeedDeal;
     }
+
     @Autowired
     public void setRabbitTemplate(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
@@ -62,7 +63,7 @@ public class InitialStdfData {
         List<File> v93kList = commonListNeedDeal.getStdfListAndDealOthersFile(v93kSourcePath);
         totalList.put(j750List, j750StdfParserImpl);
         totalList.put(v93kList, j750StdfParserImpl);
-        Set<DataLogPathBean> dataLogPathBeans=new HashSet<>();
+        Set<DataLogPathBean> dataLogPathBeans = new HashSet<>();
         for (Map.Entry<List<File>, StdfParser> stdfParserListEntry : totalList.entrySet()) {
             List<File> list = stdfParserListEntry.getKey();
             StdfParser parser = stdfParserListEntry.getValue();
@@ -74,8 +75,8 @@ public class InitialStdfData {
                     String lot = stdfInformationBean.getLot();
                     String ftStep = stdfInformationBean.getFtStep();
                     String vLot = stdfInformationBean.getVLot();
-                    String path="/" + customerCode + "/" + device + "/" + lot + "/" + vLot + "/" + ftStep;
-                    File targetDirectory = new File(backupPath +path);
+                    String path = "/" + customerCode + "/" + device + "/" + lot + "/" + vLot + "/" + ftStep;
+                    File targetDirectory = new File(backupPath + path);
                     if (!targetDirectory.exists()) {
                         targetDirectory.mkdirs();
                     }
@@ -91,8 +92,8 @@ public class InitialStdfData {
                         String CMD = STDFREADER + targetFile + " > " + stdfTxt;
                         Runtime.getRuntime().exec(new String[]{"/bin/sh", "-c", CMD});
                     }
-                    if (customerCode.equals(GYD)||customerCode.equals(FYD)) {
-                        DataLogPathBean datalogPathBean=new DataLogPathBean();
+                    if (customerCode.equals(GYD) || customerCode.equals(FYD)) {
+                        DataLogPathBean datalogPathBean = new DataLogPathBean();
                         datalogPathBean.setCustomerCode(customerCode);
                         datalogPathBean.setDevice(device);
                         datalogPathBean.setLot(lot);
@@ -108,7 +109,10 @@ public class InitialStdfData {
             }
         }
         for (DataLogPathBean dataLogPathBean : dataLogPathBeans) {
-            rabbitTemplate.convertAndSend(dataLogPathBean);
+            rabbitTemplate.convertAndSend(dataLogPathBean, (e) -> {
+                e.getMessageProperties().setExpiration(String.valueOf(1000 * 60 * 5));
+                return e;
+            });
         }
     }
 }

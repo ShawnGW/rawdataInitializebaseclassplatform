@@ -32,7 +32,7 @@ public class RabbitmqConfiguration {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMandatory(true);
         rabbitTemplate.setExchange("uid");
-        rabbitTemplate.setRoutingKey("uid.log.path");
+        rabbitTemplate.setRoutingKey("uid.log.path.wait");
         rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
         rabbitTemplate.setReturnCallback(returnCallback);
         rabbitTemplate.setRetryTemplate(retryTemplate);
