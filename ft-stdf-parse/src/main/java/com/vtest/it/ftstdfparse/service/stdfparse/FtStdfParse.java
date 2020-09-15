@@ -45,17 +45,8 @@ public class FtStdfParse {
                 }
                 if (content.contains("HARD_BIN")) {
                     hardBin = content.trim().split(":")[1].trim();
-                    continue;
                 }
             } else {
-                if (content.contains("LOT_ID") && content.trim().split(":")[0].equals("LOT_ID")) {
-                    lotId = content.trim().split(":")[1].trim();
-                    continue;
-                }
-                if (content.contains("OPER_NAM")) {
-                    operator = content.trim().split(":")[1].trim();
-                    continue;
-                }
                 if (content.contains("JOB_NAM")) {
                     stdfProgram = content.trim().split(":")[1].trim();
                     continue;

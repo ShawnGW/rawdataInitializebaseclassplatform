@@ -13,7 +13,6 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -45,21 +44,20 @@ public class RawDataDealException {
             return;
         }
         List<String> testDies = bean.getTestDies();
-        Iterator<String> iterator = testDies.iterator();
         String[] osBins = rawDataFtBean.getOsBins().split(",");
         String firstOsBin = osBins[0];
         List<String> listAfterModify = new LinkedList<>();
-        while (iterator.hasNext()) {
-            String die = iterator.next();
+        for (String die : testDies) {
             String[] tokens = die.split(":");
             String hardBin = tokens[0];
             String softBin = tokens[1];
             String site = tokens[2];
             if (hardBin.length() > 4 || softBin.length() > 4) {
-                testDies.remove(die);
                 listAfterModify.add(firstOsBin + ":" + firstOsBin + ":" + site);
+            } else {
+                listAfterModify.add(die);
             }
         }
-        testDies.addAll(listAfterModify);
+        bean.setTestDies(listAfterModify);
     }
 }

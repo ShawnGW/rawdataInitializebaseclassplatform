@@ -17,7 +17,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
+/**
+ * @author shawn.sun
+ * @date 2020-9-15 11:55:20
+ */
 @Service
 public class MessageSender {
 
@@ -36,32 +41,35 @@ public class MessageSender {
         List<File> list=new LinkedList<>();
         getFileNeedDeal(new File(path),list);
         for (File file : list) {
-           if (checkLastModifyTime(file,120)){
-               try {
-                   StdfInformationBean bean =j750StdfParser.parse(file);
-                   FtStdfInitialBean ftStdfInitialBean = parse.parse(file);
-                   ftStdfInitialBean.setFtStep(bean.getFtStep());
-                   ftStdfInitialBean.setRpStep(bean.getRpStep());
-                   ftStdfInitialBean.setVtLot(bean.getvLot());
-                   if (null==ftStdfInitialBean.getTestEndTime()) {
-                       ftStdfInitialBean.setTestEndTime(ftStdfInitialBean.getTestStartTime());
-                   }
-                   rabbitTemplate.convertAndSend("rawdata.init.exchange", "rawdata.information.vtest", ftStdfInitialBean);
-                   logger.info(ftStdfInitialBean.getLotId());
-                   logger.info(ftStdfInitialBean.getFtStep());
-                   logger.info(file.getName());
-               } catch (Exception e) {
-                   e.printStackTrace();
-               } finally {
-                   try {
-                       FileUtils.forceDelete(file);
-                   } catch (IOException e) {
-                       e.printStackTrace();
-                   }
-               }
-           }
-           }
+            if (checkLastModifyTime(file,120)){
+                try {
+                    StdfInformationBean bean = j750StdfParser.parse(file);
+                    FtStdfInitialBean ftStdfInitialBean = parse.parse(file);
+                    ftStdfInitialBean.setFtStep(bean.getFtStep());
+                    ftStdfInitialBean.setRpStep(bean.getRpStep());
+                    ftStdfInitialBean.setVtLot(bean.getvLot());
+                    ftStdfInitialBean.setOperator(bean.getOperator());
+                    ftStdfInitialBean.setLotId(bean.getLot());
+                    if (null == ftStdfInitialBean.getTestEndTime()) {
+                        ftStdfInitialBean.setTestEndTime(ftStdfInitialBean.getTestStartTime());
+                    }
+                    rabbitTemplate.convertAndSend("rawdata.init.exchange", "rawdata.information.vtest", ftStdfInitialBean);
+                    logger.info(ftStdfInitialBean.getLotId());
+                    logger.info(ftStdfInitialBean.getFtStep());
+                    logger.info(file.getName());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        FileUtils.forceDelete(file);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
     }
+
     public boolean checkLastModifyTime(File file, int seconds) {
         long currentTime = System.currentTimeMillis();
         long fileLastModifyTime = file.lastModified();
@@ -71,22 +79,22 @@ public class MessageSender {
         return false;
 
     }
+
     public void  getFileNeedDeal(File file,List<File> list){
         if (file.isFile()) {
             list.add(file);
-            return;
-        }else if(file.listFiles().length==0){
+        } else if (Objects.requireNonNull(file.listFiles()).length == 0) {
             try {
-                if (!file.getName().equals("stdfTxt")){
+                if (!file.getName().equals("stdfTxt")) {
                     FileUtils.forceDelete(file);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }else {
-            File[] files=file.listFiles();
-            for (int i = 0; i < files.length; i++) {
-                getFileNeedDeal(files[i],list);
+        } else {
+            File[] files = file.listFiles();
+            for (int i = 0; i < Objects.requireNonNull(files).length; i++) {
+                getFileNeedDeal(files[i], list);
             }
         }
 
